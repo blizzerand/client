@@ -1,12 +1,18 @@
  var prompt = require('prompt');
  var request = require('requestify');
  var io = require('socket.io-client');
+ var five = require("johnny-five");
+ var raspi = require('raspi-io');
+var board = new five.Board({
+  io: new raspi()
+});
+
  var count =0;
-/*var authCode,email,password;
+var authCode,email,password;
 
-var server='http://localhost:8080';
+var server='http://ec2-54-145-228-191.compute-1.amazonaws.com:8080';
 
-console.log("Welcome to the automation initialization setup") ;   
+console.log("Welcome to the home automation initialization setup") ;   
 console.log("Alright. Now your credentials so we could log you in.");
     
 
@@ -49,14 +55,68 @@ console.log("Alright. Now your credentials so we could log you in.");
     });
     }
   });
-*/
+
  // function websocketCreate() {
 
 var socket = io('http://localhost:8080/').connect();
 
-socket.on('message', function(data){
-    console.log(data.message);
-});
+
+
+function websocketCreate() {
+  socket.on('message', function(data){
+    console.log(data);
+    let id = data.id;
+    let status = data.status;
+    console.log(status);
+    if (status ==1)
+      switchItOn(id);
+
+
+    else
+      switchItOff(id);
+
+
+  });
+
+function switchItOn(id) {
+  board.on("ready", function() {
+
+  var relays = new five.Relays([3, 4, 5]);
+
+if(id==1) {
+  relays[0].close();
+  console.log("here");
+}
+else if(id==2) {
+  relays[1].close();
+  else if(id==3){
+    relays[2].close();
+  }
+}
+}
+
+
+}
+
+function switchItOn(id) {
+ board.on("ready", function() {
+
+var relays = new five.Relays([3, 4, 5]);
+
+  if(id==1) {
+    console.log("Here");
+  relays[0].open();
+}
+else if(id==2) {
+  relays[1].open();
+  else if(id==3){
+    relays[2].open();
+  }
+}
+}
+
+
+}
  /* socket.on('Helloworld', function(response) {
     console.log(response);
   })
