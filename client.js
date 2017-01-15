@@ -8,7 +8,9 @@ var board = new five.Board({
 });
 
  var count =0;
-var authCode,email,password;
+var authCode :string;
+var email: string;
+var password:string;
 
 var server='http://ec2-54-145-228-191.compute-1.amazonaws.com:8080';
 
@@ -33,10 +35,10 @@ console.log("Alright. Now your credentials so we could log you in.");
   
 
   prompt.get(properties, function (err, result) {
-    if (err) { return onErr(err); }
+  
     
     if(result) {
-        authCode = result.authCode;
+     var   authCode = result.authCode;
         email = result.email;
         password = result.password;
         
@@ -58,11 +60,12 @@ console.log("Alright. Now your credentials so we could log you in.");
 
  // function websocketCreate() {
 
-var socket = io('http://localhost:8080/').connect();
 
 
 
 function websocketCreate() {
+
+var socket = io('http://ec2-54-145-228-191.compute-1.amazonaws.com:8080').connect();
   socket.on('message', function(data){
     console.log(data);
     let id = data.id;
@@ -89,14 +92,15 @@ if(id==1) {
 }
 else if(id==2) {
   relays[1].close();
+}
   else if(id==3){
     relays[2].close();
   }
-}
+})
 }
 
 
-}
+
 
 function switchItOn(id) {
  board.on("ready", function() {
@@ -109,14 +113,15 @@ var relays = new five.Relays([3, 4, 5]);
 }
 else if(id==2) {
   relays[1].open();
+}
   else if(id==3){
     relays[2].open();
   }
-}
+});
 }
 
 
-}
+
  /* socket.on('Helloworld', function(response) {
     console.log(response);
   })
